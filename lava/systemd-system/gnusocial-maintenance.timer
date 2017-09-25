@@ -1,0 +1,10 @@
+[Unit]
+Description=GNU Social maintenance
+
+[Timer]
+#OnCalendar=Daily
+OnCalendar=Hourly
+Persistent=true
+
+[Install]
+WantedBy=timers.target

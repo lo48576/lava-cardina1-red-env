@@ -1,0 +1,20 @@
+[Unit]
+Description=Certbot certs renewal
+Requires=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+# CHANGEME
+ExecStartPre=/usr/bin/docker build -t certbot /srv/lava-compose/certbot
+# CHANGEME
+ExecStart=/usr/bin/docker run --rm \
+  -v "/srv/lava-compose/volumes/dynamic/certbot/etc-letsencrypt:/etc/letsencrypt" \
+  -v "/srv/lava-compose/volumes/dynamic/certbot/var-lib-letsencrypt:/var/lib/letsencrypt" \
+  -v "/srv/lava-compose/volumes/dynamic/nginx/html:/tmp/html" \
+  certbot renew --webroot -w /tmp/html
+# CHANGEME
+ExecStartPost=/opt/bin/docker-compose -f /srv/lava-compose/docker-compose.yaml kill -s SIGHUP nginx-proxy
+
+[Install]
+WantedBy=multi-user.target

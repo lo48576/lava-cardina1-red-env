@@ -1,0 +1,14 @@
+[Unit]
+Description=GNU Social maintenance
+Requires=lava-compose.service
+After=lava-compose.service
+
+[Service]
+Type=oneshot
+# CHANGEME
+WorkingDirectory=/srv/lava-compose
+# CHANGEME
+ExecStart=/opt/bin/docker-compose -f /srv/lava-compose/docker-compose.yaml exec -T gnusocial php /var/www/gnusocial/plugins/OStatus/scripts/renew-feeds.php
+
+[Install]
+WantedBy=multi-user.target

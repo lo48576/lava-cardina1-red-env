@@ -1,0 +1,56 @@
+[Unit]
+Description=Docker-compose for lava
+Requires=docker.service install-docker-compose.service
+After=docker.service install-docker-compose.service
+
+[Service]
+Restart=always
+RestartSec=10s
+# CHANGEME
+WorkingDirectory=/srv/lava-compose
+# CHANGEME
+ExecStartPre=/opt/bin/docker-compose pull
+# CHANGEME
+ExecStartPre=/opt/bin/docker-compose build
+# CHANGEME
+ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:fff0 dev ens3
+# CHANGEME
+ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:fff1 dev ens3
+# CHANGEME
+ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:fff2 dev ens3
+# CHANGEME
+ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:fff3 dev ens3
+# CHANGEME
+#ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:fff4 dev ens3
+# CHANGEME
+#ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:fff5 dev ens3
+# CHANGEME
+#ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:fff6 dev ens3
+# CHANGEME
+#ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:fff7 dev ens3
+# CHANGEME
+#ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:fff8 dev ens3
+# CHANGEME
+#ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:fff9 dev ens3
+# CHANGEME
+#ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffa dev ens3
+# CHANGEME
+#ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffb dev ens3
+# CHANGEME
+#ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffc dev ens3
+# CHANGEME
+#ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffd dev ens3
+# CHANGEME
+#ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:fffe dev ens3
+# CHANGEME
+#ExecStartPre=/bin/ip -6 neigh add proxy ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff dev ens3
+# CHANGEME
+ExecStart=/opt/bin/docker-compose up
+# CHANGEME
+ExecStop=/opt/bin/docker-compose stop --timeout 60
+# CHANGEME
+ExecStopPost=/opt/bin/docker-compose down
+TimeoutStartSec=5m
+
+[Install]
+WantedBy=multi-user.target

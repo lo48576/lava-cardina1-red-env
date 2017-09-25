@@ -1,0 +1,15 @@
+[Unit]
+Description=download and install docker compose
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/bin/mkdir -p /opt/bin
+ExecStartPre=-/bin/cp -f /opt/bin/docker-compose /tmp/docker-compose-github-binary
+ExecStartPre=/bin/sh -c "curl -L --fail https://github.com/docker/compose/releases/download/1.14.0/docker-compose-`uname -s`-`uname -m` > /tmp/docker-compose-github-binary"
+ExecStartPre=/bin/chmod +x /tmp/docker-compose-github-binary
+# CHANGEME
+ExecStart=/bin/mv -f /tmp/docker-compose-github-binary /opt/bin/docker-compose
+
+[Install]
+WantedBy=multi-user.target

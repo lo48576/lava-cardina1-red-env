@@ -1,0 +1,7 @@
+# See https://wiki.loadaverage.org/gnusocial/installation_guides/install_like_loadaverage#configuration1 .
+
+[mysqld]
+# "Use half of my memory" (by https://wiki.loadaverage.org/gnusocial/installation_guides/install_like_loadaverage#configuration1 ).
+# "You should set innodb_buffer_pool_size to about 80% of your memory." (by https://mariadb.com/kb/en/mariadb/configuring-mariadb-for-optimal-performance/#xtradb-and-innodbinnodb-xtradb-storage-engine )
+innodb_buffer_pool_size = 1024M
+innodb_thread_concurrency = 2

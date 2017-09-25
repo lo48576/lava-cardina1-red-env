@@ -1,0 +1,10 @@
+[Unit]
+Description=Renewal of Certbot certificates
+
+[Timer]
+OnCalendar=Daily
+#OnCalendar=Weekly
+Persistent=true
+
+[Install]
+WantedBy=timers.target

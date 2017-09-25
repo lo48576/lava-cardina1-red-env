@@ -1,0 +1,5 @@
+# `dGhpc2lzYXdlYWtwYXNzd29yZA==` is `thisisaweakpassword`.
+# CHANGEME
+create:dummyuser:dGhpc2lzYXdlYWtwYXNzd29yZA==
+# CHANGEME
+create:poyo:Base64EncodedUserPassword

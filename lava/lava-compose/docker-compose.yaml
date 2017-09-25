@@ -1,0 +1,71 @@
+version: "2.1"
+
+services:
+  nginx-proxy:
+    restart: always
+    # nginx:latest uses debian.
+    #image: nginx:latest
+    # alpine version uses newer openssl and supports ALPN (i.e. it supports http/2 better) (2017-01-19).
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./volumes/static/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./volumes/static/nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./volumes/static/nginx/sites-enabled:/etc/nginx/sites-enabled:ro
+      - ./volumes/dynamic/nginx/html:/usr/share/nginx/html:ro
+      - ./volumes/dynamic/certbot/etc-letsencrypt:/etc/nginx/certs:ro
+    links:
+      - gnusocial
+    networks:
+      - open-net
+      - internal-net
+  mariadb-gnusocial:
+    restart: always
+    image: mariadb:latest
+    volumes:
+      - ./volumes/dynamic/mariadb/data:/var/lib/mysql
+      - ./volumes/static/mariadb/mariadb.conf.d:/etc/mysql/mariadb.conf.d:ro
+    env_file:
+      - './mariadb-gnusocial.env'
+    networks:
+      - internal-net
+  gnusocial:
+    restart: always
+    build: ./docker-gnusocial
+    volumes:
+      - ./volumes/dynamic/gnusocial/gnu-social-repo:/var/www/gnusocial
+      - ./volumes/dynamic/gnusocial/log:/var/log/gnusocial
+      #- ./volumes/dynamic/gnusocial/avatar:/var/www/gnusocial/avatar
+      #- ./volumes/dynamic/gnusocial/file:/var/www/gnusocial/file
+      - ./volumes/static/gnusocial/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./volumes/static/gnusocial/initial_users.txt:/initial_users.txt:ro
+    networks:
+      - open-net
+      - internal-net
+    links:
+      - mariadb-gnusocial
+
+networks:
+  open-net:
+    driver: bridge
+    enable_ipv6: true
+    ipam:
+      driver: default
+      config:
+        # Change here if you want (this default values may also work).
+        - subnet: 172.32.0.0/24
+          gateway: 172.32.0.1
+        # Use adequate IPv6 addresses.
+          # CHANGEME
+        - subnet: ffff:ffff:ffff:ffff::/64
+          # CHANGEME
+          gateway: ffff:ffff:ffff:ffff:ffff:ffff:ffff:fff0
+          # CHANGEME
+          ip_range: ffff:ffff:ffff:ffff:ffff:ffff:ffff:fff0/126
+  internal-net:
+    driver: bridge
+    internal: true
+    ipam:
+      driver: default
